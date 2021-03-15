@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>juice-core</artifactId>
+    <artifactId>juice-tracing</artifactId>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
@@ -26,33 +26,27 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- spring -->
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
-        </dependency>
-
-        <!-- gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${springframework.version}</version>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet-api.version}</version>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
+            <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
-
     </dependencies>
 
 </project>

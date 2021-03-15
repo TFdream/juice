@@ -20,6 +20,11 @@ public class TimerContext {
         return startTime;
     }
 
+    public static void clear() {
+        //移除
+        TIME_HOLDER.remove();
+    }
+
     /**
      * 获取接口耗时，单位: 毫秒
      * @return
