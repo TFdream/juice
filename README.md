@@ -1,5 +1,5 @@
 # Juice
-[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![Release Version](https://img.shields.io/badge/release-0.1.0-red.svg)](https://github.com/TFdream/juice/releases) [![Build Status](https://travis-ci.org/TFdream/juice.svg?branch=master)](https://travis-ci.org/TFdream/juice)
+[![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![Release Version](https://img.shields.io/badge/release-1.0.0-red.svg)](https://github.com/TFdream/juice/releases) [![Build Status](https://travis-ci.org/TFdream/juice.svg?branch=master)](https://travis-ci.org/TFdream/juice)
 
 ## Overview
 开箱即用的Java Web开发框架，内建分布式锁、限流、分布式链路追踪等特性。
@@ -27,13 +27,13 @@ Download the latest JAR or grab via Maven:
 <dependency>
     <groupId>io.infinityclub</groupId>
     <artifactId>juice-spring-boot-starter</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
 or Gradle:
 ```
-compile 'io.infinityclub:juice-spring-boot-starter:1.0.0-SNAPSHOT'
+compile 'io.infinityclub:juice-spring-boot-starter:1.0.0'
 ```
 
 ## Quick Start
