@@ -13,6 +13,8 @@
     <description>juice project</description>
 
     <properties>
+        <apollo-client.version>1.7.0</apollo-client.version>
+        <okhttp3.version>3.14.9</okhttp3.version>
         <springboot.version>2.1.15.RELEASE</springboot.version>
         <springframework.version>5.1.7.RELEASE</springframework.version>
         <spring-data-redis.version>2.1.8.RELEASE</spring-data-redis.version>
@@ -38,6 +40,9 @@
         <module>juice-amazon-aws</module>
         <module>juice-lock</module>
         <module>juice-ratelimiter</module>
+        <module>juice-security</module>
+        <module>juice-dynamic-thread-pool</module>
+        <module>juice-spring-boot-starter</module>
     </modules>
 
     <developers>

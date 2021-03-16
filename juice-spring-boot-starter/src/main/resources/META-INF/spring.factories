@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+juice.springboot.autoconfigure.RestTemplateAutoConfiguration,\
+juice.springboot.autoconfigure.DistributedLockAutoConfiguration,\
+juice.springboot.autoconfigure.TracingAutoConfiguration,\
+juice.springboot.autoconfigure.AmazonS3AutoConfiguration,\
+juice.springboot.autoconfigure.FtpTemplateAutoConfiguration,\
+juice.springboot.autoconfigure.DynamicThreadPoolAutoConfigure

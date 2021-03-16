@@ -25,17 +25,22 @@ import java.util.List;
 public class TracingFilter implements Filter {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+    public static final String EXCLUDE_PATTERNS_NAME = "excludePathPatterns";
+    public static final String SLOW_API_NAME = "slowApiEnable";
+    public static final String TIME_THRESHOLD_NAME = "costTimeThreshold";
+
+    //=========
     private final List<String> excludedUris = new ArrayList<>();
     private boolean slowApiEnable = true;
-    private int costTimeThreshold = 5000;
+    private int costTimeThreshold = 2000;
 
     private final PathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     public void init(FilterConfig config) throws ServletException {
-        String excludePatterns = config.getInitParameter("excludePathPatterns");
-        String sle = config.getInitParameter("slowApiEnable");
-        String threshold = config.getInitParameter("costTimeThreshold");
+        String excludePatterns = config.getInitParameter(EXCLUDE_PATTERNS_NAME);
+        String sle = config.getInitParameter(SLOW_API_NAME);
+        String threshold = config.getInitParameter(TIME_THRESHOLD_NAME);
         LOG.info("分布式Tracing-过滤器-初始化参数开始, excludePatterns:{}, slowApiEnable:{}, costTimeThreshold:{}",
                 excludePatterns, sle, threshold);
 
