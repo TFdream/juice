@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * 限流脚本: https://gist.github.com/ptarjan/e38f45f2dfe601419ca3af937fff574d
  * @author Ricky Fung
  */
-public class RedisRateLimiter implements RateLimiter {
+public class RedisConcurrentRateLimiter implements RateLimiter {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private final String name;
@@ -30,17 +30,17 @@ public class RedisRateLimiter implements RateLimiter {
     // 限流脚本
     private final DefaultRedisScript<List> limitRedisScript;
 
-    public RedisRateLimiter(String name, RateLimiterConfig rateLimiterConfig) {
+    public RedisConcurrentRateLimiter(String name, RateLimiterConfig rateLimiterConfig) {
         this(name, rateLimiterConfig, null);
     }
 
-    public RedisRateLimiter(String name, RateLimiterConfig rateLimiterConfig, StringRedisTemplate stringRedisTemplate) {
+    public RedisConcurrentRateLimiter(String name, RateLimiterConfig rateLimiterConfig, StringRedisTemplate stringRedisTemplate) {
         this.name = name;
         this.rateLimiterConfig = new AtomicReference<>(rateLimiterConfig);
         //
         this.stringRedisTemplate = stringRedisTemplate;
         this.limitRedisScript = new DefaultRedisScript<>();
-        this.limitRedisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("scripts/lua/juice/request_rate_limiter.lua")));
+        this.limitRedisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("scripts/lua/juice/concurrent_requests_limiter.lua")));
         this.limitRedisScript.setResultType(List.class);
     }
 
@@ -56,25 +56,36 @@ public class RedisRateLimiter implements RateLimiter {
 
     @Override
     public boolean tryAcquire(int permits) {
-        String tokensKey = String.format("%s.tokens", getName());
-        String timestampKey = String.format("%s.timestamp", getName());
-        List<String> keys = Lists.asList(tokensKey, timestampKey);
+        throw new UnsupportedOperationException("不支持的API");
+    }
 
-        //# how many tokens per second in token-bucket algorithm.
-        int replenishRate = this.getRateLimiterConfig().getLimitForPeriod();
-        //# how many tokens the bucket can hold in token-bucket
-        int burstCapacity = replenishRate;
+    public boolean tryAcquire(String id) {
+        String key = getRedisKey();
+
+        int capacity = this.getRateLimiterConfig().getLimitForPeriod();
+        int ttl = this.getRateLimiterConfig().getLimitForPeriod();
+
         //unixtime in seconds.
         long timestamp = Instant.now().getEpochSecond();
+        //# Clear out old requests that probably got lost
+        double maxScore = timestamp - ttl;
 
+        List<String> keys = Lists.asList(key);
         List<Long> list = stringRedisTemplate.execute(limitRedisScript,
-                keys, String.valueOf(replenishRate), String.valueOf(burstCapacity), String.valueOf(timestamp), String.valueOf(1));
+                keys, String.valueOf(capacity), String.valueOf(timestamp), String.valueOf(id), String.valueOf(maxScore));
         if (LOG.isDebugEnabled()) {
-            LOG.debug("分布式限流-令牌桶算法, name={}, replenishRate={}, burstCapacity={} 操作执行结果={}",
-                    getName(), replenishRate, burstCapacity, list);
+            LOG.debug("分布式限流-并发数限流器, name={}, capacity={}, id={} 操作执行结果={}",
+                    getName(), capacity, id, list);
         }
         return list.get(0) > 0;
     }
+
+    public Long release(String id) {
+        String key = getRedisKey();
+        return stringRedisTemplate.opsForZSet().remove(key, id);
+    }
+
+    //==========
 
     @Override
     public void changeTimeoutDuration(Duration timeoutDuration) {
@@ -90,5 +101,10 @@ public class RedisRateLimiter implements RateLimiter {
                 .limitForPeriod(limitForPeriod)
                 .build();
         rateLimiterConfig.set(newConfig);
+    }
+
+    //=========
+    private String getRedisKey() {
+        return String.format("%s.concurrent", getName());
     }
 }
