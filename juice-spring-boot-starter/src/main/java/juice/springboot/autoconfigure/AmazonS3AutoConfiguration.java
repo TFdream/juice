@@ -31,7 +31,7 @@ public class AmazonS3AutoConfiguration {
     @ConditionalOnMissingBean(AmazonS3Template.class)
     @ConditionalOnProperty(name = "juice.s3.enable", havingValue = "true")
     public AmazonS3Template amazonS3Template() {
-        LOG.info("[Spring-Boot自动装配]- [AmazonS3], AmazonS3Template 注入开始, 参数:{}", JsonUtils.toJson(properties));
+        LOG.info("[Spring-Boot自动装配]- [AmazonS3], AmazonS3Template 注入开始, 参数={}", JsonUtils.toJson(properties));
         AmazonS3Template amazonS3Template = new AmazonS3Template(amazonS3());
         return amazonS3Template;
     }
@@ -39,7 +39,7 @@ public class AmazonS3AutoConfiguration {
     @Bean
     @ConditionalOnProperty(name = "juice.s3.enable", havingValue = "true")
     public AmazonS3 amazonS3() {
-        LOG.info("[Spring-Boot自动装配]- [AmazonS3], AmazonS3 注入开始, 参数:{}", JsonUtils.toJson(properties));
+        LOG.info("[Spring-Boot自动装配]- [AmazonS3], AmazonS3 注入开始, 参数={}", JsonUtils.toJson(properties));
         AmazonS3 amazonS3 = new AmazonS3Builder()
                 .endpoint(properties.getEndpoint())
                 .accessKey(properties.getAccessKey())

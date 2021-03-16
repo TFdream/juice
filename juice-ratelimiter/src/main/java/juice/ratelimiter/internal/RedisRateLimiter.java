@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author Ricky Fung
  */
 public class RedisRateLimiter implements RateLimiter {
-    private final Logger LOG = LoggerFactory.getLogger(this.getName());
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     private final String name;
     private final AtomicReference<RateLimiterConfig> rateLimiterConfig;
@@ -63,14 +63,15 @@ public class RedisRateLimiter implements RateLimiter {
         //# how many tokens per second in token-bucket algorithm.
         int replenishRate = this.getRateLimiterConfig().getLimitForPeriod();
         //# how many tokens the bucket can hold in token-bucket
-        int burstCapacity = replenishRate * 2;
+        int burstCapacity = replenishRate;
         //unixtime in seconds.
         long now = Instant.now().getEpochSecond();
 
         List<Long> list = stringRedisTemplate.execute(limitRedisScript,
                 keys, String.valueOf(replenishRate), String.valueOf(burstCapacity), String.valueOf(now), String.valueOf(1));
         if (LOG.isDebugEnabled()) {
-            LOG.debug("分布式限流-申请资源, name:{} 申请资源操作执行结果:{}", getName(), list);
+            LOG.debug("分布式限流-申请资源, name={}, replenishRate={}, burstCapacity={} 申请资源操作执行结果={}",
+                    getName(), replenishRate, burstCapacity, list);
         }
         return list.get(0) > 0;
     }

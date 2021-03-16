@@ -64,7 +64,7 @@ public class TracingAutoConfiguration {
     @ConditionalOnMissingBean(name = "_restTemplateCustomizer")
     public RestTemplateCustomizer _restTemplateCustomizer(
             final RestTemplateTracingInterceptor restTemplateTracingInterceptor) {
-        LOG.info("[Spring-Boot自动装配] Tracing模块-拦截器初始化开始, restTemplateTracingInterceptor:{}", restTemplateTracingInterceptor);
+        LOG.info("[Spring-Boot自动装配] Tracing模块-拦截器初始化开始, restTemplateTracingInterceptor={}", restTemplateTracingInterceptor);
         return restTemplate -> {
             List<ClientHttpRequestInterceptor> list = new ArrayList<>(
                     restTemplate.getInterceptors());
@@ -84,7 +84,7 @@ public class TracingAutoConfiguration {
     @ConditionalOnMissingBean(name = "_tracingFilterRegistration")
     @ConditionalOnProperty(name = "juice.tracing.enable", havingValue = "true", matchIfMissing = true)
     public FilterRegistrationBean _tracingFilterRegistration() {
-        LOG.info("[Spring-Boot自动装配] Tracing模块初始化开始, 配置参数:{}", JsonUtils.toJson(tracingInterceptProperties));
+        LOG.info("[Spring-Boot自动装配] Tracing模块初始化开始, 配置参数={}", JsonUtils.toJson(tracingInterceptProperties));
 
         String pathPatterns = tracingInterceptProperties.getPathPatterns();
         Integer order = tracingInterceptProperties.getOrder();
@@ -114,7 +114,7 @@ public class TracingAutoConfiguration {
         }
         registrationBean.setOrder(order); // 过滤器的优先级
 
-        LOG.info("[Spring-Boot自动装配] Tracing模块初始化结束, urlPatterns:{}, order:{}", urlPatterns, order);
+        LOG.info("[Spring-Boot自动装配] Tracing模块初始化结束, urlPatterns={}, order={}", urlPatterns, order);
         return registrationBean;
     }
 

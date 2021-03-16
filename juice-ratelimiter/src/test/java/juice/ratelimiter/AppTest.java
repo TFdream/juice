@@ -4,6 +4,7 @@ import juice.contracts.ResultDTO;
 import juice.ratelimiter.internal.RedisRateLimiter;
 import juice.ratelimiter.internal.SemaphoreBasedRateLimiter;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.time.Duration;
@@ -19,7 +20,7 @@ public class AppTest {
     @Before
     public void setUp() {
         RateLimiterConfig rateLimiterConfig = RateLimiterConfig.custom()
-                .limitForPeriod(Integer.MAX_VALUE)
+                .limitForPeriod(5)
                 .limitRefreshPeriod(Duration.ofMillis(1000))
                 .timeoutDuration(Duration.ofSeconds(5))
                 .build();
@@ -29,6 +30,10 @@ public class AppTest {
     }
 
     @Test
+    public void testApp() {
+        System.out.println("test");
+    }
+
     public ResultDTO secKill() {
         boolean success = redisRateLimiter.tryAcquire();
         if (!success) {

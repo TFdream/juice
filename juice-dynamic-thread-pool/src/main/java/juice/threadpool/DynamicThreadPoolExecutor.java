@@ -76,7 +76,7 @@ public class DynamicThreadPoolExecutor extends AbstractExecutorService {
 
     private void onConfigChange(ConfigChangeEvent event) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("动态线程池-配置发生变化, namespace:{}", event.getNamespace());
+            LOG.debug("动态线程池-配置发生变化, namespace={}", event.getNamespace());
         }
         if (!event.getNamespace().equals(namespace)) {
             return;
@@ -85,7 +85,7 @@ public class DynamicThreadPoolExecutor extends AbstractExecutorService {
             if (key.startsWith(keyPrefix)) {
                 ConfigChange change = event.getChange(key);
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug("动态线程池-配置发生变化, namespace:{}, key:{} 变化内容:{}", event.getNamespace(), key, change);
+                    LOG.debug("动态线程池-配置发生变化, namespace={}, key={} 变化内容={}", event.getNamespace(), key, change);
                 }
                 refreshThreadPoolExecutor(this.delegate);
                 break;
@@ -95,7 +95,7 @@ public class DynamicThreadPoolExecutor extends AbstractExecutorService {
 
     private void refreshThreadPoolExecutor(final ThreadPoolExecutor threadPoolExecutor) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("动态线程池-配置发生变化-刷新线程池开始, name:{}, namespace:{}, keyPrefix:{}", name, namespace, keyPrefix);
+            LOG.debug("动态线程池-配置发生变化-刷新线程池开始, name={}, namespace={}, keyPrefix={}", name, namespace, keyPrefix);
         }
 
         threadPoolExecutor.setCorePoolSize(getConfigCorePoolSize());
@@ -108,7 +108,7 @@ public class DynamicThreadPoolExecutor extends AbstractExecutorService {
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("动态线程池-配置发生变化-刷新线程池结束, name:{}, namespace:{}, keyPrefix:{}", name, namespace, keyPrefix);
+            LOG.debug("动态线程池-配置发生变化-刷新线程池结束, name={}, namespace={}, keyPrefix={}", name, namespace, keyPrefix);
         }
     }
 
@@ -124,7 +124,7 @@ public class DynamicThreadPoolExecutor extends AbstractExecutorService {
         int queueCapacity = getConfigQueueCapacity();
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("动态线程池-初始化开始, corePoolSize:{}, maxPoolSize:{}, keepAliveTime:{}, queueType:{}, queueCapacity:{}, poolName:{}",
+            LOG.debug("动态线程池-初始化开始, corePoolSize={}, maxPoolSize={}, keepAliveTime={}, queueType={}, queueCapacity={}, poolName={}",
                     corePoolSize, maxPoolSize, keepAliveTime, queueType, queueCapacity, name);
         }
 
@@ -132,7 +132,7 @@ public class DynamicThreadPoolExecutor extends AbstractExecutorService {
 
         RejectedExecutionHandler rejectedHandler = getRejectedExecutionHandler(getRejectedExecutionType());
 
-        LOG.debug("动态线程池-初始化, corePoolSize:{}, maxPoolSize:{}, keepAliveTime:{}, queueType:{}, queueCapacity:{}, poolName:{}",
+        LOG.debug("动态线程池-初始化, corePoolSize={}, maxPoolSize={}, keepAliveTime={}, queueType={}, queueCapacity={}, poolName={}",
                 corePoolSize, maxPoolSize, keepAliveTime, queueType, queueCapacity, name);
 
         return new ThreadPoolExecutor(corePoolSize, maxPoolSize,

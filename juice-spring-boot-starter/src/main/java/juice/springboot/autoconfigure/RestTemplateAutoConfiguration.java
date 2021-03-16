@@ -46,7 +46,7 @@ public class RestTemplateAutoConfiguration {
         Integer writeTimeoutMillis = properties.getWriteTimeout();
         Integer connectTimeoutMillis = properties.getConnectTimeout();
 
-        LOG.info("[Spring-Boot自动装配] OkHttp模块初始化开始, readTimeoutMillis:{}, writeTimeoutMillis:{},connectTimeoutMillis:{}",
+        LOG.info("[Spring-Boot自动装配] OkHttp模块初始化开始, readTimeoutMillis={}, writeTimeoutMillis={},connectTimeoutMillis={}",
                 readTimeoutMillis, writeTimeoutMillis, connectTimeoutMillis);
 
         OkHttpClient client = new OkHttpClient.Builder()
