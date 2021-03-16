@@ -2,16 +2,18 @@
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0) [![Release Version](https://img.shields.io/badge/release-0.1.0-red.svg)](https://github.com/TFdream/juice/releases) [![Build Status](https://travis-ci.org/TFdream/juice.svg?branch=master)](https://travis-ci.org/TFdream/juice)
 
 ## Overview
-Juice is a programming toolkit for building micro-service (or elegant monoliths) applications in Java.
+开箱即用的Java Web开发框架，内建分布式锁、限流、分布式链路追踪等特性。
 
 ## Features
-* Java common utility classes and SPI Extension.
-* Distributed Lock built on top of the Redis and Zookeeper.
-* Distributed RateLimiter which is similar to [Guava](https://github.com/google/guava)'s RateLimiter.
+* 常用工具类及Java SPI扩展；
+* 基于Redis的分布式实现；
+* 多种限流策略实现；
+* 分布式链路追踪，跨应用传递traceId；
+* [动态线程池实现](https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html)；
 
 ## Requirements
 The minimum requirements to run the quick start are:
-* JDK 1.7 or above
+* JDK 1.8 or above
 * A java-based project management software like [Maven](https://maven.apache.org/) or [Gradle](http://gradle.org/)
 
 ## Installation
@@ -23,15 +25,15 @@ The minimum requirements to run the quick start are:
 Download the latest JAR or grab via Maven:
 ```
 <dependency>
-    <groupId>io.dreamstudio</groupId>
-    <artifactId>juice-core</artifactId>
-    <version>0.1.0</version>
+    <groupId>io.infinityclub</groupId>
+    <artifactId>juice-spring-boot-starter</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
 
 or Gradle:
 ```
-compile 'io.dreamstudio:juice-core:0.1.0'
+compile 'io.infinityclub:juice-spring-boot-starter:1.0.0-SNAPSHOT'
 ```
 
 ## Quick Start
