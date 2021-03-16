@@ -41,6 +41,7 @@
         <module>juice-lock</module>
         <module>juice-ratelimiter</module>
         <module>juice-security</module>
+        <module>juice-dynamic-datasource</module>
         <module>juice-dynamic-thread-pool</module>
         <module>juice-spring-boot-starter</module>
     </modules>
