@@ -37,8 +37,10 @@ compile 'io.infinityclub:juice-spring-boot-starter:1.0.0'
 ```
 
 ## Quick Start
-[Wiki](https://github.com/TFdream/juice/wiki/Quick_Start) <br>
-[wiki-中文](https://github.com/TFdream/juice/wiki/zh_Quick_Start)
+[Wiki](https://github.com/TFdream/juice/wiki/Quick_Start)
 
 ## License
 Juice 基于 [Apache License 2.0](https://github.com/TFdream/juice/blob/master/LICENSE) 协议。
+
+## Contacts
+邮箱：ricky_feng@163.com
