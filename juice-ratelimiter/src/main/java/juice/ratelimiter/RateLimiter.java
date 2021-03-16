@@ -5,7 +5,11 @@ import java.time.Duration;
 /**
  * @author Ricky Fung
  */
-public interface RateLimiter {
+public interface RateLimiter<C extends RateLimiterConfig> {
+
+    String getName();
+
+    C getRateLimiterConfig();
 
     /**
      * Acquires a permit from this rate limiter, blocking until one is available, or the thread
@@ -42,7 +46,4 @@ public interface RateLimiter {
      */
     void changeLimitForPeriod(int limitForPeriod);
 
-    String getName();
-
-    RateLimiterConfig getRateLimiterConfig();
 }

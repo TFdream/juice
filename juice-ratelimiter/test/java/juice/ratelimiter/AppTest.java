@@ -1,7 +1,6 @@
 package juice.ratelimiter;
 
 import juice.contracts.ResultDTO;
-import juice.ratelimiter.internal.AtomicRateLimiter;
 import juice.ratelimiter.internal.RedisRateLimiter;
 import juice.ratelimiter.internal.SemaphoreBasedRateLimiter;
 import org.junit.Before;
@@ -15,7 +14,6 @@ import java.time.Duration;
 public class AppTest {
 
     private RateLimiter semaphoreBasedRateLimiter;
-    private AtomicRateLimiter atomicRateLimiter;
     private RedisRateLimiter redisRateLimiter;
 
     @Before
@@ -27,8 +25,7 @@ public class AppTest {
                 .build();
         semaphoreBasedRateLimiter = new SemaphoreBasedRateLimiter("semaphoreBased",
                 rateLimiterConfig);
-        atomicRateLimiter = new AtomicRateLimiter("atomicBased", rateLimiterConfig);
-        redisRateLimiter = new RedisRateLimiter("", rateLimiterConfig);
+        redisRateLimiter = new RedisRateLimiter("redis", rateLimiterConfig);
     }
 
     @Test
