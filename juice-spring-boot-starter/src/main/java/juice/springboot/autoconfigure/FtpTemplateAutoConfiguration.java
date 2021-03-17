@@ -27,7 +27,7 @@ public class FtpTemplateAutoConfiguration {
     private FtpClientConfigProperties properties;
 
     @Bean
-    @ConditionalOnMissingBean(FtpTemplate.class)
+    @ConditionalOnMissingBean(name = "ftpTemplate")
     @ConditionalOnProperty(name = "juice.ftp.enable", havingValue = "true")
     public FtpTemplate ftpTemplate() {
         LOG.info("[Spring-Boot自动装配] - FtpTemplate 初始化开始, 参数={}", JsonUtils.toJson(properties));
