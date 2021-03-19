@@ -51,11 +51,11 @@ public abstract class DateUtils {
 
     //========
     public static Date parseJdkDate(String dateStr) {
-        return parseJdkDate(dateStr, DATE_STANDARD_FORMAT);
+        return parseJdkDate(dateStr, STANDARD_FORMAT);
     }
     public static Date parseJdkDate(String dateStr, String pattern) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-        return convertToDateViaInstant(LocalDate.parse(dateStr, formatter));
+        LocalDateTime dateTime = parseDateTime(dateStr, pattern);
+        return convertToDateViaInstant(dateTime);
     }
 
     //=========
