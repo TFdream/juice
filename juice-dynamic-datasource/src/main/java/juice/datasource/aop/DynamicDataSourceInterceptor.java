@@ -7,6 +7,11 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ClassUtils;
 
@@ -15,14 +20,13 @@ import java.lang.reflect.Method;
 /**
  * @author Ricky Fung
  */
-public class DynamicDataSourceInterceptor implements MethodInterceptor {
+public class DynamicDataSourceInterceptor implements MethodInterceptor, BeanFactoryAware {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
-    private final DynamicDataSource dynamicDataSource;
+    public static final String DEFAULT_DATASOURCE_BEAN_NAME = "dynamicDataSource";
 
-    public DynamicDataSourceInterceptor(DynamicDataSource dynamicDataSource) {
-        this.dynamicDataSource = dynamicDataSource;
-    }
+    private DynamicDataSource dynamicDataSource;
+    private BeanFactory beanFactory;
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -84,4 +88,40 @@ public class DynamicDataSourceInterceptor implements MethodInterceptor {
         }
     }
 
+    public void configure() {
+        //初始化
+        LOG.info("动态数据源拦截器-初始化开始, beanFactory={}", this.beanFactory);
+        this.dynamicDataSource = getDefaultDynamicDataSource(this.beanFactory);
+        LOG.info("动态数据源拦截器-初始化结束, dynamicDataSource={}", dynamicDataSource);
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
+
+    protected DynamicDataSource getDefaultDynamicDataSource(BeanFactory beanFactory) {
+        if (beanFactory != null) {
+            try {
+                // Search for TaskExecutor bean... not plain Executor since that would
+                // match with ScheduledExecutorService as well, which is unusable for
+                // our purposes here. TaskExecutor is more clearly designed for it.
+                return beanFactory.getBean(DynamicDataSource.class);
+            }
+            catch (NoUniqueBeanDefinitionException ex) {
+                LOG.debug("Could not find unique DynamicDataSource bean", ex);
+                try {
+                    return beanFactory.getBean(DEFAULT_DATASOURCE_BEAN_NAME, DynamicDataSource.class);
+                }
+                catch (NoSuchBeanDefinitionException ex2) {
+                    if (LOG.isInfoEnabled()) {
+                        LOG.info(String.format("More than one DynamicDataSource bean found within the context, and none is named " +
+                                "'%s'. Mark one of them as primary or name it '%s' (possibly " +
+                                "as an alias) in order to use it for routing processing: ", DEFAULT_DATASOURCE_BEAN_NAME, ex.getBeanNamesFound()));
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

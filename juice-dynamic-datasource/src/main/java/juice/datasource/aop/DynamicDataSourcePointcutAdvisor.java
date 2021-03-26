@@ -1,44 +1,90 @@
 package juice.datasource.aop;
 
-import juice.datasource.DynamicDataSource;
+import juice.datasource.annotation.DSRouting;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
+import org.springframework.aop.support.ComposablePointcut;
+import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.util.Assert;
+
+import java.lang.annotation.Annotation;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Ricky Fung
  */
-public class DynamicDataSourcePointcutAdvisor extends AbstractPointcutAdvisor{
-    private static final String[] EMPTY_ARRAY = {};
+public class DynamicDataSourcePointcutAdvisor extends AbstractPointcutAdvisor implements BeanFactoryAware {
 
-    private final String[] basePackages;
+    private Advice advice;
 
-    private DynamicDataSource dynamicDataSource;
+    private Pointcut pointcut;
+    //默认数据源名称
+    private String dataSourceName;
 
-    public DynamicDataSourcePointcutAdvisor(){
-        this(EMPTY_ARRAY);
+    private Set<Class<? extends Annotation>> targetAnnotationTypes;
+
+    public DynamicDataSourcePointcutAdvisor() {
+        this.targetAnnotationTypes = new LinkedHashSet<>(2);
+        targetAnnotationTypes.add(DSRouting.class);
+        this.advice = buildAdvice();
+        this.pointcut = buildPointcut(targetAnnotationTypes);
     }
 
-    public DynamicDataSourcePointcutAdvisor(String[] basePackages) {
-        this.basePackages = basePackages;
+    public void setDataSourceName(String dataSourceName) {
+        this.dataSourceName = dataSourceName;
+    }
+
+    public String getDataSourceName() {
+        return dataSourceName;
     }
 
     @Override
     public Pointcut getPointcut() {
-        return new DynamicDataSourcePointcut(this.basePackages);
+        return pointcut;
     }
 
     @Override
     public Advice getAdvice() {
-        return new DynamicDataSourceInterceptor(dynamicDataSource);
+        return advice;
     }
 
-    public void setDynamicDataSource(DynamicDataSource dynamicDataSource) {
-        this.dynamicDataSource = dynamicDataSource;
+    public void setAnnotationType(Class<? extends Annotation> annotationType) {
+        Assert.notNull(annotationType, "'annotationType' must not be null");
+        this.targetAnnotationTypes.add(annotationType);
+        this.pointcut = buildPointcut(this.targetAnnotationTypes);
     }
 
-    public DynamicDataSource getDynamicDataSource() {
-        return dynamicDataSource;
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        if (this.advice instanceof BeanFactoryAware) {
+            ((BeanFactoryAware) this.advice).setBeanFactory(beanFactory);
+        }
+    }
+
+    protected Advice buildAdvice() {
+        DynamicDataSourceInterceptor interceptor = new DynamicDataSourceInterceptor();
+        interceptor.configure();
+        return interceptor;
+    }
+
+    protected Pointcut buildPointcut(Set<Class<? extends Annotation>> dsAnnotationTypes) {
+        ComposablePointcut result = null;
+        for (Class<? extends Annotation> dsAnnotationType : dsAnnotationTypes) {
+            Pointcut cpc = new AnnotationMatchingPointcut(dsAnnotationType, true);
+            Pointcut mpc = new AnnotationMatchingPointcut(null, dsAnnotationType, true);
+            if (result == null) {
+                result = new ComposablePointcut(cpc);
+            } else {
+                result.union(cpc);
+            }
+            result = result.union(mpc);
+        }
+        return (result != null ? result : Pointcut.TRUE);
     }
 
 }

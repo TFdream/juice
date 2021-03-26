@@ -19,14 +19,13 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
 
         AnnotationAttributes attributes = AnnotationAttributes.fromMap(importingClassMetadata
                 .getAnnotationAttributes(EnableDynamicDataSource.class.getName()));
-        String[] basePackages = attributes.getStringArray("basePackages");
-        int order = attributes.getNumber("order");
 
+        //优先级
+        int order = attributes.getNumber("order");
         BeanDefinitionBuilder bdb = BeanRegistrarUtils.genericBeanDefinition(DynamicDataSourcePointcutAdvisor.class);
-        bdb.addConstructorArgValue(basePackages);
         bdb.addPropertyValue("order", order);
         //属性赋值
-        bdb.addPropertyReference("dynamicDataSource", attributes.getString("dataSource"));
+        bdb.addPropertyValue("dataSourceName", attributes.getString("dataSource"));
 
         BeanDefinition bd = bdb.getBeanDefinition();
 
