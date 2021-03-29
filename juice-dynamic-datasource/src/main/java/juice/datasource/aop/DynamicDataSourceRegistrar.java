@@ -1,5 +1,6 @@
 package juice.datasource.aop;
 
+import juice.datasource.bpp.DynamicAdvisingBeanPostProcessor;
 import juice.datasource.annotation.EnableDynamicDataSource;
 import juice.datasource.util.BeanRegistrarUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -22,13 +23,13 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
 
         //优先级
         int order = attributes.getNumber("order");
-        BeanDefinitionBuilder bdb = BeanRegistrarUtils.genericBeanDefinition(DynamicDataSourcePointcutAdvisor.class);
+        BeanDefinitionBuilder bdb = BeanRegistrarUtils.genericBeanDefinition(DynamicAdvisingBeanPostProcessor.class);
         bdb.addPropertyValue("order", order);
         //属性赋值
         bdb.addPropertyValue("dataSourceName", attributes.getString("dataSource"));
 
         BeanDefinition bd = bdb.getBeanDefinition();
 
-        BeanRegistrarUtils.registerBeanDefinitionIfNotExists(registry, DynamicDataSourcePointcutAdvisor.class.getName(), bd);
+        BeanRegistrarUtils.registerBeanDefinitionIfNotExists(registry, DynamicAdvisingBeanPostProcessor.class.getName(), bd);
     }
 }

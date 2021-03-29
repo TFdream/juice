@@ -1,6 +1,6 @@
 package juice.datasource.annotation;
 
-import juice.datasource.aop.DynamicDataSourceInterceptor;
+import juice.datasource.aop.DynamicDataSourcePointcutAdvisor;
 import juice.datasource.aop.DynamicDataSourceRegistrar;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.Ordered;
@@ -17,7 +17,7 @@ import java.lang.annotation.*;
 public @interface EnableDynamicDataSource {
 
     /**
-     * The name of the Dynamic DataSource, default is {@link DynamicDataSourceInterceptor#DEFAULT_DATASOURCE_BEAN_NAME}.
+     * The name of the Dynamic DataSource, default is {@link DynamicDataSourcePointcutAdvisor#DEFAULT_DATASOURCE_BEAN_NAME}.
      * @return
      */
     String dataSource() default "";
