@@ -96,7 +96,7 @@ class JdkDateSerializer implements
         if (StringUtils.isEmpty(dateStr)) {
             return null;
         }
-        return JodaTimeUtils.parseDate(dateStr);
+        return DateUtils.parseJdkDate(dateStr);
     }
 
     @Override
@@ -104,6 +104,6 @@ class JdkDateSerializer implements
         if (src==null) {
             return null;
         }
-        return new JsonPrimitive(JodaTimeUtils.format(src));
+        return new JsonPrimitive(DateUtils.format(src));
     }
 }
