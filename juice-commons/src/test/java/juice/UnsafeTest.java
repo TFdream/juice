@@ -2,7 +2,7 @@ package juice;
 
 import org.junit.Test;
 
-import static juice.concurrent.UnsafeAccess.UNSAFE;
+import static juice.concurrent.UnsafeAccess.getUnsafe;
 
 /**
  * @author Ricky Fung
@@ -14,7 +14,7 @@ public class UnsafeTest {
     static {
         try {
             Class<?> ak = UnsafeTest.class;
-            valueOffset = UNSAFE.objectFieldOffset
+            valueOffset = getUnsafe().objectFieldOffset
                     (ak.getDeclaredField("value"));
         } catch (Exception e) {
             throw new Error(e);
@@ -22,7 +22,7 @@ public class UnsafeTest {
     }
 
     final boolean cas(long cmp, long val) {
-        return UNSAFE.compareAndSwapLong(this, valueOffset, cmp, val);
+        return getUnsafe().compareAndSwapLong(this, valueOffset, cmp, val);
     }
 
     @Test
