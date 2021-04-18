@@ -9,12 +9,16 @@ import java.lang.reflect.Field;
  * @author Ricky Fung
  */
 public final class UnsafeAccess {
-    public static final Unsafe UNSAFE;
+    private static final Unsafe UNSAFE;
     static {
-        UNSAFE = getUnsafe();
+        UNSAFE = getUnsafeByReflect();
     }
 
     private UnsafeAccess() {}
+
+    public static Unsafe getUnsafe() {
+        return UNSAFE;
+    }
 
     /**
      * UNSAFE.objectFieldOffset shortcut
@@ -31,7 +35,7 @@ public final class UnsafeAccess {
         }
     }
 
-    private static Unsafe getUnsafe() {
+    private static Unsafe getUnsafeByReflect() {
         Unsafe instance;
         try {
             final Field field = Unsafe.class.getDeclaredField("theUnsafe");
