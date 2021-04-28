@@ -13,6 +13,52 @@ import java.util.zip.ZipOutputStream;
  */
 public abstract class FileUtils {
 
+    private static final long _KB = 1 << 10;
+
+    private static final long _MB = 1 << 20;
+
+    private static final long _GB = 1 << 30;
+
+    public static String formatSize(long size) {
+        if (size < _KB) {
+            return String.format("%sB", size);
+        }
+        if (size < _MB) {
+            return String.format("%sKB", DecimalUtils.div(size, _KB, 2));
+        }
+        if (size < _GB) {
+            return String.format("%sMB", DecimalUtils.div(size, _MB, 2));
+        }
+        return String.format("%sGB", DecimalUtils.div(size, _GB, 2));
+    }
+
+    public static String getFormatFileSize(File file) {
+        long size = getFileSize(file);
+        return formatSize(size);
+    }
+
+    public static long getFileSize(File file) {
+        if (file == null) {
+            return 0;
+        }
+        if (!file.exists()) {
+            return 0;
+        }
+        if (file.isFile()) {
+            return file.length();
+        } else if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            long total = 0;
+            for (File f : files) {
+                total += getFileSize(f);
+            }
+            return total;
+        }
+        throw new IllegalStateException("未知文件类型:"+file.getAbsolutePath());
+    }
+
+    //==========
+
     /**
      * 删除单个文件
      * @param file
