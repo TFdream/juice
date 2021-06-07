@@ -1,5 +1,6 @@
 package juice.util;
 
+import java.util.BitSet;
 import java.util.Random;
 
 /**
@@ -82,5 +83,32 @@ public abstract class ArrayUtils {
         for (int i=size; i>1; i--) {
             swap(arr, i - 1, rnd.nextInt(i));
         }
+    }
+
+    /**
+     * 从数组中随机抽取N个不重复的元素
+     * @param arr
+     * @param count
+     * @return
+     */
+    public static String[] selectRandom(String[] arr, int count) {
+        if (arr == null || arr.length <= count) {
+            return arr;
+        }
+        int length = arr.length;
+        //随机选出X个商品
+        String[] randomArr = new String[count];
+        int pos = 0;
+        BitSet bitSet = new BitSet(length);
+        while (pos < count) {
+            int index = RandomUtils.nextInt(0, length);
+            if (bitSet.get(index)) {
+                continue;
+            }
+            randomArr[pos++] = arr[index];
+            bitSet.set(index, true);
+        }
+
+        return randomArr;
     }
 }
