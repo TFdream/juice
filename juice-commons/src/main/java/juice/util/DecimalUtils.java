@@ -170,6 +170,13 @@ public final class DecimalUtils {
         return b1.add(b2);
     }
 
+    public static BigDecimal add(BigDecimal b1, BigDecimal b2, int scale) {
+        return b1.add(b2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    }
+    public static BigDecimal add(BigDecimal b1, BigDecimal b2, int scale, int roundingMode) {
+        return b1.add(b2).setScale(scale, roundingMode);
+    }
+
     //=======减法
     public static BigDecimal sub(int v1, int v2) {
         BigDecimal b1 = new BigDecimal(Integer.toString(v1));
@@ -193,6 +200,13 @@ public final class DecimalUtils {
         return b1.subtract(b2);
     }
 
+    public static BigDecimal sub(BigDecimal b1, BigDecimal b2, int scale) {
+        return b1.subtract(b2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    }
+    public static BigDecimal sub(BigDecimal b1, BigDecimal b2, int scale, int roundingMode) {
+        return b1.subtract(b2).setScale(scale, roundingMode);
+    }
+
     //=======乘法
     public static BigDecimal mul(int v1, int v2) {
         BigDecimal b1 = new BigDecimal(Integer.toString(v1));
@@ -214,6 +228,13 @@ public final class DecimalUtils {
 
     public static BigDecimal mul(BigDecimal b1, BigDecimal b2) {
         return b1.multiply(b2);
+    }
+
+    public static BigDecimal mul(BigDecimal b1, BigDecimal b2, int scale) {
+        return b1.multiply(b2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    }
+    public static BigDecimal mul(BigDecimal b1, BigDecimal b2, int scale, int roundingMode) {
+        return b1.multiply(b2).setScale(scale, roundingMode);
     }
 
     //=======除法
