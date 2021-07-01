@@ -1,6 +1,7 @@
 package juice.contracts;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,9 +15,11 @@ public class ListResultDTO<T> implements Serializable {
      */
     public static final ListResultDTO DEFAULT = new ListResultDTO();
 
-    private List<T> list;
+    protected List<T> list;
 
-    public ListResultDTO() {}
+    public ListResultDTO() {
+        this(Collections.EMPTY_LIST);
+    }
 
     public ListResultDTO(List<T> list) {
         this.list = list;

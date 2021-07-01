@@ -3,6 +3,7 @@ package juice.contracts;
 import juice.util.CollectionUtils;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 分页方式返回结果
@@ -37,6 +38,17 @@ public class PagingListResultDTO<T> extends ListResultDTO<T> implements Serializ
 
     //是否有下一页
     private boolean hasNextPage;
+
+    public PagingListResultDTO() {}
+
+    public PagingListResultDTO(long total, List<T> dataList, int pageNum, int pageSize) {
+        this.total = total;
+        this.list = dataList;
+        this.pageNum = pageNum;
+        this.pageSize = pageSize;
+        //计算分页
+        this.calculatePages();
+    }
 
     public long getTotal() {
         return total;
