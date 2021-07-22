@@ -6,7 +6,7 @@
 
 ## Features
 * 常用工具类及Java SPI扩展；
-* 基于Redis的分布式实现；
+* 基于Redis的分布式锁实现(包括MultiLock、RedLock)；
 * 多种限流策略实现；
 * 分布式链路追踪，跨应用传递traceId；
 * [动态线程池实现](https://tech.meituan.com/2020/04/02/java-pooling-pratice-in-meituan.html)；
