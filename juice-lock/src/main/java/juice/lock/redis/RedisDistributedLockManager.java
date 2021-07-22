@@ -2,6 +2,7 @@ package juice.lock.redis;
 
 import juice.lock.DistributedLock;
 import juice.lock.DistributedLockManager;
+import juice.lock.DistributedReadWriteLock;
 import juice.lock.MultiLock;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
@@ -28,7 +29,13 @@ public class RedisDistributedLockManager implements DistributedLockManager {
     }
 
     @Override
+    public DistributedReadWriteLock getReadWriteLock(String name) {
+        return new RedisReadWriteLock(redisTemplate, name);
+    }
+
+    @Override
     public DistributedLock getMultiLock(DistributedLock... locks) {
         return new MultiLock(locks);
     }
+
 }

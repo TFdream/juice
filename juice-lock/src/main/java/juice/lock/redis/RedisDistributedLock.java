@@ -1,9 +1,5 @@
 package juice.lock.redis;
 
-import juice.lock.DistributedLock;
-import juice.util.UUIDUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.Collections;
@@ -12,23 +8,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Ricky Fung
  */
-public class RedisDistributedLock implements DistributedLock {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+public class RedisDistributedLock extends AbstractRedisLock {
 
-    final String id;
-    final String name;
-    private StringRedisTemplate redisTemplate;
-    final long internalLockLeaseTime;
     RedisDistributedLock(StringRedisTemplate redisTemplate, String name) {
-        this.id = UUIDUtils.getId();
-        this.redisTemplate = redisTemplate;
-        this.name = name;
-        this.internalLockLeaseTime = 30 * 1000;
-    }
-
-    @Override
-    public boolean lock(long leaseTime, TimeUnit unit) {
-        return tryLock(-1, leaseTime, unit);
+        super(redisTemplate, name);
     }
 
     @Override
@@ -66,32 +49,16 @@ public class RedisDistributedLock implements DistributedLock {
     }
 
     @Override
-    public boolean isLocked() {
-        return redisTemplate.hasKey(getName());
-    }
-
-    @Override
-    public boolean isHeldByCurrentThread() {
-        return isHeldByThread(Thread.currentThread().getId());
-    }
-
-    @Override
-    public void forceUnlock() {
-        //强制解锁
-        redisTemplate.delete(getName());
-    }
-
-    @Override
-    public boolean unlock() {
-        return unlockInnerAsync(Thread.currentThread().getId());
+    public void unlock() {
+        unlockInner(Thread.currentThread().getId());
     }
 
     boolean tryLockInner(long leaseTime, TimeUnit unit, long threadId) {
         long lockLeaseTimeInMillis = unit.toMillis(leaseTime);
         Long returnVal = (Long) redisTemplate.execute(RedisScriptHolder.getInstance().getLockScript(),
                 Collections.singletonList(getName()), String.valueOf(lockLeaseTimeInMillis), getLockName(threadId));
-        if (logger.isDebugEnabled()) {
-            logger.debug("分布式锁-加锁操作, name:{}, lockName:{} 加锁操作执行结果:{}", getName(), getLockName(threadId), returnVal);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("分布式锁-加锁操作, name={}, lockName={} 加锁操作执行结果={}", getName(), getLockName(threadId), returnVal);
         }
         if (returnVal > 0) {
             return true;
@@ -99,15 +66,11 @@ public class RedisDistributedLock implements DistributedLock {
         return false;
     }
 
-    public boolean isHeldByThread(long threadId) {
-        return redisTemplate.opsForHash().hasKey(getName(), getLockName(threadId));
-    }
-
-    protected boolean unlockInnerAsync(long threadId) {
+    protected boolean unlockInner(long threadId) {
         Long returnVal = (Long) redisTemplate.execute(RedisScriptHolder.getInstance().getUnlockScript(),
                 Collections.singletonList(getName()), String.valueOf(internalLockLeaseTime), getLockName(threadId));
-        if (logger.isDebugEnabled()) {
-            logger.debug("分布式锁-解锁操作, name:{}, lockName:{} 解锁操作执行结果:{}", getName(), getLockName(threadId), returnVal);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("分布式锁-解锁操作, name={}, lockName={} 解锁操作执行结果={}", getName(), getLockName(threadId), returnVal);
         }
         if (returnVal > 0) {
             return true;
@@ -115,11 +78,4 @@ public class RedisDistributedLock implements DistributedLock {
         return false;
     }
 
-    protected String getName() {
-        return name;
-    }
-
-    protected String getLockName(long threadId) {
-        return String.format("%s:%s", id, threadId);
-    }
 }

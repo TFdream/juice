@@ -4,6 +4,7 @@ import org.springframework.dao.QueryTimeoutException;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
 
 /**
  *
@@ -21,8 +22,8 @@ public class MultiLock implements DistributedLock {
     }
 
     @Override
-    public boolean lock(long leaseTime, TimeUnit unit) {
-        return tryLock(-1, leaseTime, unit);
+    public String getName() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -35,7 +36,7 @@ public class MultiLock implements DistributedLock {
         for (DistributedLock lock : locks) {
             boolean lockAcquired;
             try {
-                lockAcquired = lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
+                lockAcquired = lock.tryLock(waitTime, leaseTime, unit);
             } catch (QueryTimeoutException e) {
                 lock.unlock();
                 lockAcquired = false;
@@ -66,25 +67,65 @@ public class MultiLock implements DistributedLock {
     }
 
     @Override
+    public boolean isHeldByThread(long threadId) {
+        return false;
+    }
+
+    @Override
     public boolean isHeldByCurrentThread() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void forceUnlock() {
+    public int getHoldCount() {
+        return 0;
+    }
+
+    @Override
+    public long remainTimeToLive() {
+        return 0;
+    }
+
+    @Override
+    public boolean forceUnlock() {
+        BitSet bs = new BitSet();
+        int index = 0;
         for (DistributedLock lock : locks) {
-            lock.forceUnlock();
+            bs.set(index++, lock.forceUnlock());
+        }
+        return bs.cardinality() == locks.size();
+    }
+
+    @Override
+    public void lock() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void lockInterruptibly() throws InterruptedException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean tryLock() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
+        return tryLock(-1, time, unit);
+    }
+
+    @Override
+    public void unlock() {
+        for (DistributedLock lock : locks) {
+            lock.unlock();
         }
     }
 
     @Override
-    public boolean unlock() {
-        BitSet bs = new BitSet();
-        int index = 0;
-        for (DistributedLock lock : locks) {
-            bs.set(index++, lock.unlock());
-        }
-        return bs.cardinality() == locks.size();
+    public Condition newCondition() {
+        throw new UnsupportedOperationException();
     }
 
     //========
