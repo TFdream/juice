@@ -1,7 +1,7 @@
 package juice.springboot.autoconfigure;
 
-import juice.lock.DistributedLockClient;
-import juice.lock.redis.RedisDistributedLockClient;
+import juice.lock.DistributedLockManager;
+import juice.lock.redis.RedisDistributedLockManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -18,16 +18,16 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  */
 @Configuration
 @AutoConfigureAfter(RedisAutoConfiguration.class)
-@ConditionalOnClass({DistributedLockClient.class, StringRedisTemplate.class})
+@ConditionalOnClass({DistributedLockManager.class, StringRedisTemplate.class})
 public class DistributedLockAutoConfiguration {
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     @Bean
     @ConditionalOnBean(StringRedisTemplate.class)
     @ConditionalOnMissingBean(name = "distributedLockClient")
-    public DistributedLockClient distributedLockClient(StringRedisTemplate stringRedisTemplate) {
+    public DistributedLockManager distributedLockClient(StringRedisTemplate stringRedisTemplate) {
         LOG.info("[Spring-Boot自动装配] 分布式锁模块初始化开始, redisTemplate={}", stringRedisTemplate);
-        return new RedisDistributedLockClient(stringRedisTemplate);
+        return new RedisDistributedLockManager(stringRedisTemplate);
     }
 
 }
