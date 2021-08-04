@@ -8,11 +8,13 @@ import org.springframework.aop.ClassFilter;
 import org.springframework.aop.MethodMatcher;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
+import org.springframework.aop.support.StaticMethodMatcher;
 import org.springframework.aop.support.annotation.AnnotationClassFilter;
-import org.springframework.aop.support.annotation.AnnotationMethodMatcher;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * @author Ricky Fung
@@ -22,14 +24,17 @@ public class DynamicDataSourcePointcutAdvisor extends AbstractPointcutAdvisor im
 
     public static final String DEFAULT_DATASOURCE_BEAN_NAME = "dynamicDataSource";
 
-    private Advice advice;
+    private final Advice advice;
 
-    private Pointcut pointcut;
+    private final Pointcut pointcut;
 
     //默认数据源名称
     private String dataSourceName;
 
-    public DynamicDataSourcePointcutAdvisor() {}
+    public DynamicDataSourcePointcutAdvisor() {
+        this.pointcut = buildPointcut();
+        this.advice = buildAdvice();
+    }
 
     public void setDataSourceName(String dataSourceName) {
         this.dataSourceName = dataSourceName;
@@ -37,51 +42,44 @@ public class DynamicDataSourcePointcutAdvisor extends AbstractPointcutAdvisor im
 
     @Override
     public Pointcut getPointcut() {
-        if (pointcut == null) {
-            pointcut = buildPointcut();
-        }
         return pointcut;
     }
 
     @Override
     public Advice getAdvice() {
-        if (advice == null) {
-            advice = buildAdvice();
-        }
         return advice;
     }
 
     protected Advice buildAdvice() {
-        DynamicDataSourceInterceptor interceptor = new DynamicDataSourceInterceptor();
-        return interceptor;
+        return new DynamicDataSourceInterceptor();
     }
 
     protected Pointcut buildPointcut() {
-        return new AnnotationMethodPointcut(DSRouting.class);
+        return new DynamicDSPointcut(DSRouting.class, true);
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        LOG.info("动态数据源切换-初始化开始, order={}, dataSourceName={}", getOrder(), dataSourceName);
-        this.pointcut = getPointcut();
-        this.advice = getAdvice();
+        LOG.info("动态数据源切换-初始化完成, order={}, dataSourceName={}", getOrder(), dataSourceName);
     }
 
-    static class AnnotationMethodPointcut implements Pointcut {
-        private ClassFilter classFilter;
-        private AnnotationMethodMatcher methodMatcher;
-        AnnotationMethodPointcut(Class<? extends Annotation> annotationType) {
-            this(annotationType, true);
+    static class DynamicDSPointcut implements Pointcut {
+        private final ClassFilter classFilter;
+        private final MethodMatcher methodMatcher;
+
+        DynamicDSPointcut(Class<? extends Annotation> annotationType) {
+            this(annotationType, false);
         }
 
-        AnnotationMethodPointcut(Class<? extends Annotation> annotationType, boolean checkInherited) {
+        DynamicDSPointcut(Class<? extends Annotation> annotationType, boolean checkInherited) {
             this.classFilter = new AnnotationClassFilter(annotationType, checkInherited);
-            this.methodMatcher = new AnnotationMethodMatcher(annotationType, checkInherited);
+            //PS: AnnotationMethodMatcher
+            this.methodMatcher = new DynamicMethodMatcher(annotationType, checkInherited);
         }
 
         @Override
         public ClassFilter getClassFilter() {
-            return classFilter;
+            return ClassFilter.TRUE;
         }
 
         @Override
@@ -89,4 +87,36 @@ public class DynamicDataSourcePointcutAdvisor extends AbstractPointcutAdvisor im
             return this.methodMatcher;
         }
     }
+
+    static class DynamicMethodMatcher extends StaticMethodMatcher {
+        private final Class<? extends Annotation> annotationType;
+
+        private final boolean checkInherited;
+
+        public DynamicMethodMatcher(Class<? extends Annotation> annotationType) {
+            this(annotationType, false);
+        }
+
+        public DynamicMethodMatcher(Class<? extends Annotation> annotationType, boolean checkInherited) {
+            this.annotationType = annotationType;
+            this.checkInherited = checkInherited;
+        }
+
+        @Override
+        public boolean matches(Method method, Class<?> targetClass) {
+            return matchesMethod(method, annotationType, checkInherited) ||
+                    matchesClass(targetClass, annotationType, checkInherited);
+        }
+
+        boolean matchesClass(Class<?> targetClass, Class<? extends Annotation> annotationType, boolean checkInherited) {
+            return (checkInherited ? AnnotatedElementUtils.hasAnnotation(targetClass, annotationType) :
+                    targetClass.isAnnotationPresent(annotationType));
+        }
+
+        boolean matchesMethod(Method method, Class<? extends Annotation> annotationType, boolean checkInherited) {
+            return (checkInherited ? AnnotatedElementUtils.hasAnnotation(method, annotationType) :
+                    method.isAnnotationPresent(annotationType));
+        }
+    }
+
 }
