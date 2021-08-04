@@ -1,8 +1,9 @@
 package juice.datasource.aop;
 
-import juice.datasource.bpp.DynamicAdvisingBeanPostProcessor;
 import juice.datasource.annotation.EnableDynamicDataSource;
 import juice.datasource.util.BeanRegistrarUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -14,6 +15,7 @@ import org.springframework.core.type.AnnotationMetadata;
  * @author Ricky Fung
  */
 public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar {
+    private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
@@ -23,13 +25,17 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
 
         //优先级
         int order = attributes.getNumber("order");
-        BeanDefinitionBuilder bdb = BeanRegistrarUtils.genericBeanDefinition(DynamicAdvisingBeanPostProcessor.class);
+        BeanDefinitionBuilder bdb = BeanRegistrarUtils.genericBeanDefinition(DynamicDataSourcePointcutAdvisor.class);
         bdb.addPropertyValue("order", order);
         //属性赋值
         bdb.addPropertyValue("dataSourceName", attributes.getString("dataSource"));
 
         BeanDefinition bd = bdb.getBeanDefinition();
+        //不能少，否则不生效
+        bd.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 
-        BeanRegistrarUtils.registerBeanDefinitionIfNotExists(registry, DynamicAdvisingBeanPostProcessor.class.getName(), bd);
+        BeanRegistrarUtils.registerBeanDefinitionIfNotExists(registry, DynamicDataSourcePointcutAdvisor.class.getName(), bd);
+
+        LOG.info("动态数据源切换-初始化, DynamicDataSourcePointcutAdvisor自动装配成功");
     }
 }

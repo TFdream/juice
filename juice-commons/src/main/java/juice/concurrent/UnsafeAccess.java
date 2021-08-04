@@ -9,13 +9,16 @@ import java.lang.reflect.Field;
  * @author Ricky Fung
  */
 public final class UnsafeAccess {
+    @SuppressWarnings("all")
     private static final Unsafe UNSAFE;
+
     static {
         UNSAFE = getUnsafeByReflect();
     }
 
     private UnsafeAccess() {}
 
+    @SuppressWarnings("all")
     public static Unsafe getUnsafe() {
         return UNSAFE;
     }
@@ -27,6 +30,7 @@ public final class UnsafeAccess {
      * @return
      * @throws RuntimeException
      */
+    @SuppressWarnings("all")
     public static long fieldOffset(Class clz, String fieldName) throws RuntimeException {
         try {
             return UNSAFE.objectFieldOffset(clz.getDeclaredField(fieldName));
@@ -35,6 +39,7 @@ public final class UnsafeAccess {
         }
     }
 
+    @SuppressWarnings("all")
     private static Unsafe getUnsafeByReflect() {
         Unsafe instance;
         try {

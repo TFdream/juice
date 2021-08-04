@@ -1,43 +1,94 @@
 package juice.datasource;
 
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+import juice.util.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.jdbc.datasource.AbstractDataSource;
+import org.springframework.util.Assert;
 
-import java.util.Collections;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
  * 动态数据源
  * @author Ricky Fung
  */
-public class DynamicDataSource extends AbstractRoutingDataSource {
+public class DynamicDataSource extends AbstractDataSource implements InitializingBean {
+    /**
+     * Specify the map of target DataSources
+     */
+    private Map<String, DataSource> targetDataSources;
 
-    private static final ThreadLocal<String> DATASOURCE_KEY_HOLDER = new ThreadLocal<>();
+    /**
+     * Specify the default target DataSource
+     */
+    private DataSource defaultTargetDataSource;
 
-    //key: package name value:数据源名称
-    private Map<String, String> pkgDefaultDsKeyMap = Collections.EMPTY_MAP;
+    private boolean lenientFallback = true;
 
-    public void setPkgDefaultDsKeyMap(Map<String, String> pkgDefaultDsKeyMap) {
-        this.pkgDefaultDsKeyMap = pkgDefaultDsKeyMap;
+    public void setTargetDataSources(Map<String, DataSource> targetDataSources) {
+        this.targetDataSources = targetDataSources;
     }
 
-    public String getPkgDefaultDsKey(String pkgName) {
-        return this.pkgDefaultDsKeyMap.get(pkgName);
-    }
-
-    public void setDataSourceKey(String dataSourceKey) {
-        DATASOURCE_KEY_HOLDER.set(dataSourceKey);
-    }
-
-    public String getDataSourceKey() {
-        return DATASOURCE_KEY_HOLDER.get();
+    public void setDefaultTargetDataSource(DataSource defaultTargetDataSource) {
+        this.defaultTargetDataSource = defaultTargetDataSource;
     }
 
     public void clear() {
-        DATASOURCE_KEY_HOLDER.remove();
+        DynamicDSContextHolder.clear();
     }
 
     @Override
-    protected Object determineCurrentLookupKey() {
-        return getDataSourceKey();
+    public Connection getConnection() throws SQLException {
+        return determineTargetDataSource().getConnection();
+    }
+
+    @Override
+    public Connection getConnection(String username, String password) throws SQLException {
+        return determineTargetDataSource().getConnection();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        if (iface.isInstance(this)) {
+            return (T) this;
+        }
+        return determineTargetDataSource().unwrap(iface);
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return (iface.isInstance(this) || determineTargetDataSource().isWrapperFor(iface));
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        if (this.targetDataSources == null) {
+            throw new IllegalArgumentException("Property 'targetDataSources' is required");
+        }
+    }
+
+    public Map<String, DataSource> getTargetDataSources() {
+        return targetDataSources;
+    }
+
+    //=========
+
+    protected DataSource determineTargetDataSource() {
+        Assert.notNull(this.targetDataSources, "targetDataSources is NULL");
+
+        String lookupKey = DynamicDSContextHolder.get();
+        DataSource dataSource = this.targetDataSources.get(lookupKey);
+
+        if (dataSource == null && (this.lenientFallback || StringUtils.isEmpty(lookupKey))) {
+            dataSource = this.defaultTargetDataSource;
+        }
+
+        if (dataSource == null) {
+            throw new IllegalStateException("Cannot determine target DataSource for lookup key [" + lookupKey + "]");
+        }
+        return dataSource;
     }
 }
