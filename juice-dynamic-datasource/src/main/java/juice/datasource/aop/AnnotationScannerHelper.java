@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author Ricky Fung
  */
-public abstract class AnnotationScanner {
+public abstract class AnnotationScannerHelper {
 
     private static final Map<AnnotationCacheKey, Annotation> classAnnotationCache =
             new ConcurrentReferenceHashMap<>(256);
@@ -24,13 +24,7 @@ public abstract class AnnotationScanner {
 
     public static <A extends Annotation> A findAnnotation(Class<?> clazz, @Nullable Class<A> annotationType) {
         AnnotationCacheKey cacheKey = new AnnotationCacheKey(clazz, annotationType);
-        A result = (A) classAnnotationCache.get(cacheKey);
-        if (result == null) {
-            result = AnnotatedElementUtils.findMergedAnnotation(clazz, annotationType);
-            if (result != null) {
-                classAnnotationCache.put(cacheKey, result);
-            }
-        }
+        A result = (A) classAnnotationCache.computeIfAbsent(cacheKey, key -> AnnotatedElementUtils.findMergedAnnotation(clazz, annotationType));
         return result;
     }
 

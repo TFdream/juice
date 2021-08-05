@@ -52,9 +52,9 @@ public class DynamicDataSourceInterceptor implements MethodInterceptor {
         Method method = invocation.getMethod();
         //优先从方法上查找
         //注：此处需要使用AnnotatedElementUtils.findMergedAnnotation，不能使用AnnotationUtils.findAnnotation
-        DSRouting dsRouting = AnnotationScanner.findAnnotation(method, DSRouting.class);
+        DSRouting dsRouting = AnnotationScannerHelper.findAnnotation(method, DSRouting.class);
         if (dsRouting == null) {    //尝试从类上查找
-            dsRouting = AnnotationScanner.findAnnotation(method.getDeclaringClass(), DSRouting.class);
+            dsRouting = AnnotationScannerHelper.findAnnotation(method.getDeclaringClass(), DSRouting.class);
         }
         return dsRouting;
     }

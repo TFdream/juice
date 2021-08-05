@@ -28,26 +28,19 @@ public class DynamicDataSourcePointcutAdvisor extends AbstractPointcutAdvisor im
 
     private final Pointcut pointcut;
 
-    //默认数据源名称
-    private String dataSourceName;
-
     public DynamicDataSourcePointcutAdvisor() {
         this.pointcut = buildPointcut();
         this.advice = buildAdvice();
     }
 
-    public void setDataSourceName(String dataSourceName) {
-        this.dataSourceName = dataSourceName;
-    }
-
     @Override
     public Pointcut getPointcut() {
-        return pointcut;
+        return this.pointcut;
     }
 
     @Override
     public Advice getAdvice() {
-        return advice;
+        return this.advice;
     }
 
     protected Advice buildAdvice() {
@@ -60,7 +53,7 @@ public class DynamicDataSourcePointcutAdvisor extends AbstractPointcutAdvisor im
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        LOG.info("动态数据源切换-初始化完成, order={}, dataSourceName={}", getOrder(), dataSourceName);
+        LOG.info("动态数据源切换-初始化完成, order={}, pointcut={}, advice={}", getOrder(), this.pointcut, this.advice);
     }
 
     static class DynamicDSPointcut implements Pointcut {

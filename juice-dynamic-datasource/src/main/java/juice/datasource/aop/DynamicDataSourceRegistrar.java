@@ -27,11 +27,9 @@ public class DynamicDataSourceRegistrar implements ImportBeanDefinitionRegistrar
         int order = attributes.getNumber("order");
         BeanDefinitionBuilder bdb = BeanRegistrarUtils.genericBeanDefinition(DynamicDataSourcePointcutAdvisor.class);
         bdb.addPropertyValue("order", order);
-        //属性赋值
-        bdb.addPropertyValue("dataSourceName", attributes.getString("dataSource"));
 
         BeanDefinition bd = bdb.getBeanDefinition();
-        //不能少，否则不生效
+        //不能少，否则InfrastructureAdvisorAutoProxyCreator不生效
         bd.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
 
         BeanRegistrarUtils.registerBeanDefinitionIfNotExists(registry, DynamicDataSourcePointcutAdvisor.class.getName(), bd);

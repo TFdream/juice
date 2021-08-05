@@ -1,9 +1,7 @@
 package juice.datasource.annotation;
 
-import juice.datasource.aop.DynamicDataSourcePointcutAdvisor;
 import juice.datasource.aop.DynamicDataSourceRegistrar;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.Ordered;
 
 import java.lang.annotation.*;
 
@@ -17,13 +15,7 @@ import java.lang.annotation.*;
 public @interface EnableDynamicDataSource {
 
     /**
-     * The name of the Dynamic DataSource, default is {@link DynamicDataSourcePointcutAdvisor#DEFAULT_DATASOURCE_BEAN_NAME}.
-     * @return
-     */
-    String dataSource() default "";
-
-    /**
-     * The order of the DynamicDataSourcePointcutAdvisor, default is {@link Ordered#LOWEST_PRECEDENCE}, which is Integer.MAX_VALUE.
+     * The order of the DynamicDataSourcePointcutAdvisor, default is -1.
      * @return
      */
     int order() default -1;
