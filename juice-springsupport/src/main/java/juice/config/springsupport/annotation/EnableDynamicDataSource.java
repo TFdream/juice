@@ -1,6 +1,6 @@
-package juice.datasource.annotation;
+package juice.config.springsupport.annotation;
 
-import juice.datasource.aop.DynamicDataSourceRegistrar;
+import juice.config.springsupport.datasource.DynamicDataSourceRegistrar;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

@@ -1,4 +1,4 @@
-package juice.datasource.aop;
+package juice.config.springsupport.util;
 
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.lang.Nullable;
@@ -12,13 +12,32 @@ import java.util.Map;
 /**
  * @author Ricky Fung
  */
-public abstract class AnnotationScannerHelper {
+public abstract class AnnotationScanUtils {
 
     private static final Map<AnnotationCacheKey, Annotation> classAnnotationCache =
             new ConcurrentReferenceHashMap<>(256);
 
     private static final Map<AnnotationCacheKey, Annotation> methodAnnotationCache =
             new ConcurrentReferenceHashMap<>(256);
+
+    //==========
+
+    public static boolean matchesClass(Class<?> targetClass, Class<? extends Annotation> annotationType) {
+        return matchesClass(targetClass, annotationType, false);
+    }
+
+    public static boolean matchesClass(Class<?> targetClass, Class<? extends Annotation> annotationType, boolean checkInherited) {
+        return (checkInherited ? AnnotatedElementUtils.hasAnnotation(targetClass, annotationType) :
+                targetClass.isAnnotationPresent(annotationType));
+    }
+
+    public static boolean matchesMethod(Method method, Class<? extends Annotation> annotationType) {
+        return matchesMethod(method, annotationType, false);
+    }
+    public static boolean matchesMethod(Method method, Class<? extends Annotation> annotationType, boolean checkInherited) {
+        return (checkInherited ? AnnotatedElementUtils.hasAnnotation(method, annotationType) :
+                method.isAnnotationPresent(annotationType));
+    }
 
     //==========
 

@@ -1,4 +1,4 @@
-package juice.datasource.util;
+package juice.config.springsupport.util;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

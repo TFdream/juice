@@ -1,7 +1,8 @@
-package juice.datasource.aop;
+package juice.config.springsupport.datasource;
 
+import juice.config.springsupport.annotation.DSRouting;
+import juice.config.springsupport.util.AnnotationScanUtils;
 import juice.datasource.DynamicDSContextHolder;
-import juice.datasource.annotation.DSRouting;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
@@ -52,9 +53,9 @@ public class DynamicDataSourceInterceptor implements MethodInterceptor {
         Method method = invocation.getMethod();
         //优先从方法上查找
         //注：此处需要使用AnnotatedElementUtils.findMergedAnnotation，不能使用AnnotationUtils.findAnnotation
-        DSRouting dsRouting = AnnotationScannerHelper.findAnnotation(method, DSRouting.class);
+        DSRouting dsRouting = AnnotationScanUtils.findAnnotation(method, DSRouting.class);
         if (dsRouting == null) {    //尝试从类上查找
-            dsRouting = AnnotationScannerHelper.findAnnotation(method.getDeclaringClass(), DSRouting.class);
+            dsRouting = AnnotationScanUtils.findAnnotation(method.getDeclaringClass(), DSRouting.class);
         }
         return dsRouting;
     }
