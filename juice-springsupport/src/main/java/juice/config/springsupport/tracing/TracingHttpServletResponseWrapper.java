@@ -1,4 +1,4 @@
-package juice.tracing.internal;
+package juice.config.springsupport.tracing;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;

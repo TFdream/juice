@@ -42,17 +42,12 @@
         </dependency>
         <dependency>
             <groupId>io.infinityclub</groupId>
-            <artifactId>juice-lock</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.infinityclub</groupId>
-            <artifactId>juice-tracing</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.infinityclub</groupId>
             <artifactId>juice-ratelimiter</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.infinityclub</groupId>
+            <artifactId>juice-springsupport</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

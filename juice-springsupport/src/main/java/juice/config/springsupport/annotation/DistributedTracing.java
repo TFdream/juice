@@ -1,4 +1,4 @@
-package juice.tracing.annotation;
+package juice.config.springsupport.annotation;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 

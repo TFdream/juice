@@ -1,10 +1,11 @@
-package juice.tracing.filter;
+package juice.config.springsupport.tracing.filter;
 
 import juice.commons.Splitter;
 import juice.commons.TimerContext;
+import juice.config.springsupport.tracing.TracingHttpServletResponseWrapper;
 import juice.tracing.TracingConstants;
 import juice.tracing.TracingContext;
-import juice.tracing.internal.TracingHttpServletResponseWrapper;
+
 import juice.util.CollectionUtils;
 import juice.util.StringUtils;
 import org.slf4j.Logger;

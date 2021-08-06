@@ -1,7 +1,7 @@
 package juice.springboot.autoconfigure;
 
 import juice.springboot.properties.RestTemplateConfigProperties;
-import juice.tracing.annotation.DistributedTracing;
+import juice.config.springsupport.annotation.DistributedTracing;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

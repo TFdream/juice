@@ -1,4 +1,4 @@
-package juice.tracing.spring;
+package juice.config.springsupport.tracing;
 
 import juice.tracing.TracingConstants;
 import juice.tracing.TracingContext;

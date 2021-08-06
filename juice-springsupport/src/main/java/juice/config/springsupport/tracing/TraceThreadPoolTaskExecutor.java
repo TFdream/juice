@@ -1,4 +1,4 @@
-package juice.tracing.spring;
+package juice.config.springsupport.tracing;
 
 import juice.tracing.ttl.TaskDecorator;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;

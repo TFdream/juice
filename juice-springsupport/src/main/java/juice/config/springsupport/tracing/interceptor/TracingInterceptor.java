@@ -1,4 +1,4 @@
-package juice.tracing.interceptor;
+package juice.config.springsupport.tracing.interceptor;
 
 import juice.commons.TimerContext;
 import juice.tracing.TracingConstants;

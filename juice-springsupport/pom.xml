@@ -22,10 +22,14 @@
         <!-- juice -->
         <dependency>
             <groupId>io.infinityclub</groupId>
+            <artifactId>juice-tracing</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.infinityclub</groupId>
             <artifactId>juice-dynamic-datasource</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
         <dependency>
             <groupId>io.infinityclub</groupId>
             <artifactId>juice-lock</artifactId>
@@ -45,6 +49,14 @@
             <version>${springframework.version}</version>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${springframework.version}</version>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -52,5 +64,12 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
