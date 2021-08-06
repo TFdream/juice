@@ -25,7 +25,9 @@ public class DLockRegistrar implements ImportBeanDefinitionRegistrar {
 
         //优先级
         int order = attributes.getNumber("order");
+        String lockManagerBeanName = attributes.getString("lockManager");
         BeanDefinitionBuilder bdb = BeanRegistrarUtils.genericBeanDefinition(DLockPointcutAdvisor.class);
+        bdb.addPropertyValue("lockManagerBeanName", lockManagerBeanName);
         bdb.addPropertyValue("order", order);
 
         BeanDefinition bd = bdb.getBeanDefinition();

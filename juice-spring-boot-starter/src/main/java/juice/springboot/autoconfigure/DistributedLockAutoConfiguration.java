@@ -24,8 +24,8 @@ public class DistributedLockAutoConfiguration {
 
     @Bean
     @ConditionalOnBean(StringRedisTemplate.class)
-    @ConditionalOnMissingBean(name = "distributedLockClient")
-    public DistributedLockManager distributedLockClient(StringRedisTemplate stringRedisTemplate) {
+    @ConditionalOnMissingBean(name = "distributedLockManager")
+    public DistributedLockManager distributedLockManager(StringRedisTemplate stringRedisTemplate) {
         LOG.info("[Spring-Boot自动装配] 分布式锁模块初始化开始, redisTemplate={}", stringRedisTemplate);
         return new RedisDistributedLockManager(stringRedisTemplate);
     }

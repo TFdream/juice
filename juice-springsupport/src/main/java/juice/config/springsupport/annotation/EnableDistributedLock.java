@@ -1,7 +1,9 @@
 package juice.config.springsupport.annotation;
 
+import juice.config.springsupport.Constant;
 import juice.config.springsupport.lock.DLockRegistrar;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
 
 import java.lang.annotation.*;
 
@@ -14,5 +16,7 @@ import java.lang.annotation.*;
 @Import(DLockRegistrar.class)
 public @interface EnableDistributedLock {
 
-    int order();
+    String lockManager() default Constant.DEFAULT_LOCK_MANAGER_BEAN_NAME;
+
+    int order() default Ordered.LOWEST_PRECEDENCE;
 }

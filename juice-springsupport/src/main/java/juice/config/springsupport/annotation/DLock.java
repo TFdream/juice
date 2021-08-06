@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
 @Inherited
 public @interface DLock {
 
-    String key();
+    String prefix() default "";
 
-    String expression();
+    String key();
 
     long waitTime() default -1L;
 
