@@ -105,13 +105,14 @@ public class TracingFilter implements Filter {
                 //计算接口执行耗时
                 long costTime = TimerContext.stopAndGet();
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("分布式Tracing-过滤器-链路追踪结束, 接口URI:{}, 请求方式:{}, 耗时:{} ms, traceId:{}",
-                            requestURI, req.getMethod(), costTime, traceId);
-                }
                 if (slowApiEnable && costTime >= costTimeThreshold) {
-                    LOG.info("分布式Tracing-过滤器-链路追踪【慢查询】, 接口URI:{}, 请求方式:{}, 耗时:{} ms",
+                    LOG.warn("分布式Tracing-过滤器-链路追踪【慢查询】, 接口URI:{}, 请求方式:{}, 耗时:{} ms",
                             requestURI, req.getMethod(), costTime);
+                } else {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("分布式Tracing-过滤器-链路追踪结束, 接口URI:{}, 请求方式:{}, 耗时:{} ms, traceId:{}",
+                                requestURI, req.getMethod(), costTime, traceId);
+                    }
                 }
             } finally {
                 //删除tracing
