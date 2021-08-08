@@ -8,12 +8,22 @@ import java.util.Enumeration;
  */
 public abstract class IpUtils {
 
+    /**
+     * IP转换为无符号整数
+     * @param ipStr
+     * @return
+     */
     public static long ip2Long(String ipStr) {
         String[] ip = ipStr.split("\\.");
         return (Long.parseLong(ip[0]) << 24) + (Long.parseLong(ip[1]) << 16)
                 + (Long.parseLong(ip[2]) << 8) + Long.parseLong(ip[3]);
     }
 
+    /**
+     * 无符号整数转换为IP
+     * @param ipLong
+     * @return
+     */
     public static String long2Ip(long ipLong) {
         StringBuilder sb = new StringBuilder(15);
         sb.append(ipLong >>> 24).append(".");
