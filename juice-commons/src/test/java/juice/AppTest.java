@@ -4,6 +4,7 @@ import juice.entity.UserAddress;
 import juice.entity.UserInfo;
 import juice.util.ClassUtils;
 import juice.util.DateUtils;
+import juice.util.IpUtils;
 import juice.util.ReflectionUtils;
 import org.junit.Test;
 
@@ -15,6 +16,15 @@ import java.util.Date;
  * @author Ricky Fung
  */
 public class AppTest {
+
+    @Test
+    public void testIP() {
+        String ip = "255.168.100.201";
+
+        long num = IpUtils.ip2Long(ip);
+
+        System.out.println(num + "===>" + IpUtils.long2Ip(num));
+    }
 
     @Test
     public void testDateUtils() {
