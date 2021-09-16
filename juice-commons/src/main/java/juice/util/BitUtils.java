@@ -17,30 +17,53 @@ public class BitUtils {
     //========
     
     /**
-     * 从低位到高位的顺序取n的第m位
-     * @param num
-     * @param bitIndex 从1开始
+     * Sets the bit at the specified index to {@code true}.
+     * @param source
+     * @param bitIndex [0, 31]
      * @return
      */
-    public static int getBit(int num, int bitIndex) {
-        return (num >> (bitIndex - 1)) & 1;
-    }
-    
-    public static boolean getBoolean(int num, int bitIndex) {
-        return (num & (1L << bitIndex)) != 0;
+    public static int set(int source, int bitIndex) {
+        source |= (1L << bitIndex);
+        return source;
     }
     
     /**
-     * 将n的第m位 置1或者0
-     * @param num
-     * @param bitIndex 从1开始
-     * @param flag
+     * Sets the bit at the specified index to the specified value.
+     * @param source
+     * @param bitIndex
+     * @param value
      * @return
      */
-    public static int setBit(int num, int bitIndex, boolean flag) {
-        if (flag) {
-            return num | (1 << (bitIndex - 1));
+    public static int set(int source, int bitIndex, boolean value) {
+        if (value) {
+            return set(source, bitIndex);
+        } else {
+            return clear(source, bitIndex);
         }
-        return num & ~(0 << (bitIndex - 1));
     }
+    
+    /**
+     * Sets the bit specified by the index to {@code false}.
+     * @param source
+     * @param bitIndex
+     * @return
+     */
+    public static int clear(int source, int bitIndex) {
+        source &= ~(1L << bitIndex);
+        return source;
+    }
+    
+    /**
+     * Returns the value of the bit with the specified index. The value
+     * is {@code true} if the bit with the index {@code bitIndex}
+     * is currently 1; otherwise, the result
+     * is {@code false}.
+     * @param source
+     * @param bitIndex
+     * @return
+     */
+    public static boolean get(int source, int bitIndex) {
+        return ((source & (1L << bitIndex)) != 0);
+    }
+    
 }

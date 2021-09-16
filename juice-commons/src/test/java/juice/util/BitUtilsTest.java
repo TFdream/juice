@@ -21,8 +21,12 @@ public class BitUtilsTest {
         int num = 9;
         System.out.println("二进制形式："+Integer.toBinaryString(num));
     
-        System.out.println(BitUtils.getBit(num, 2));
-        System.out.println(BitUtils.getBoolean(num, 2));
+        System.out.println(BitUtils.get(num, 0));
+        System.out.println(BitUtils.get(num, 1));
+        System.out.println(BitUtils.get(num, 3));
+        System.out.println(BitUtils.get(num, 9));
+        System.out.println(BitUtils.get(num, 31));
+        System.out.println(BitUtils.get(num, 32));
     }
     
     @Test
@@ -30,10 +34,10 @@ public class BitUtilsTest {
         int num = -70;
         System.out.println("二进制形式："+Integer.toBinaryString(num));
         
-        int result = BitUtils.setBit(num, 3, true);
+        int result = BitUtils.set(num, 2, true);
         System.out.println("二进制形式："+Integer.toBinaryString(result) + "对应十进制："+result);
     
-        result = BitUtils.setBit(num, 3, false);
+        result = BitUtils.set(num, 2, false);
         System.out.println("二进制形式："+Integer.toBinaryString(result) + "对应十进制："+result);
     }
 }
