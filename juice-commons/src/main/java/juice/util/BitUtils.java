@@ -18,26 +18,29 @@ public class BitUtils {
     
     /**
      * 从低位到高位的顺序取n的第m位
-     * @param n
-     * @param m
+     * @param num
+     * @param bitIndex 从1开始
      * @return
      */
-    public static int getBit(int n, int m) {
-        return  (n >> (m - 1)) & 1;
+    public static int getBit(int num, int bitIndex) {
+        return (num >> (bitIndex - 1)) & 1;
+    }
+    
+    public static boolean getBoolean(int num, int bitIndex) {
+        return (num & (1L << bitIndex)) != 0;
     }
     
     /**
      * 将n的第m位 置1或者0
-     * @param n
-     * @param m
+     * @param num
+     * @param bitIndex 从1开始
      * @param flag
      * @return
      */
-    public static int setBit(int n, int m, boolean flag) {
+    public static int setBit(int num, int bitIndex, boolean flag) {
         if (flag) {
-            return n | (1 << (m - 1));
+            return num | (1 << (bitIndex - 1));
         }
-        return n & ~(0 << (m - 1));
+        return num & ~(0 << (bitIndex - 1));
     }
-    
 }

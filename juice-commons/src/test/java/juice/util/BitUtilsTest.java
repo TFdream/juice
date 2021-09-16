@@ -17,11 +17,23 @@ public class BitUtilsTest {
     }
     
     @Test
-    public void testSet() {
-        int n = 5;
-        System.out.println("二进制形式："+Integer.toBinaryString(n));
+    public void testGetBit() {
+        int num = 9;
+        System.out.println("二进制形式："+Integer.toBinaryString(num));
+    
+        System.out.println(BitUtils.getBit(num, 2));
+        System.out.println(BitUtils.getBoolean(num, 2));
+    }
+    
+    @Test
+    public void testSetBit() {
+        int num = -70;
+        System.out.println("二进制形式："+Integer.toBinaryString(num));
         
-        System.out.println("高4位：" + BitUtils.setBit(n, 2, true));
-        System.out.println("高4位：" + BitUtils.setBit(n, 2, false));
+        int result = BitUtils.setBit(num, 3, true);
+        System.out.println("二进制形式："+Integer.toBinaryString(result) + "对应十进制："+result);
+    
+        result = BitUtils.setBit(num, 3, false);
+        System.out.println("二进制形式："+Integer.toBinaryString(result) + "对应十进制："+result);
     }
 }
