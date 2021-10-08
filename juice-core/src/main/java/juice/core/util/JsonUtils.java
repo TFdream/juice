@@ -17,6 +17,7 @@ public class JsonUtils {
             .registerTypeAdapter(Date.class, new JdkDateSerializer())
             .registerTypeAdapter(LocalDateTime.class, new Java8DateTimeSerializer())
             .registerTypeAdapter(LocalDate.class, new Java8DateSerializer())
+            .disableHtmlEscaping()
             .create();
 
     public static String toJson(Object obj) {
