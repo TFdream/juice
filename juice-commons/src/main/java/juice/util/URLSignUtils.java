@@ -7,12 +7,14 @@ import java.util.TreeMap;
  * URL防篡改工具类
  * @author Ricky Fung
  */
-public abstract class URLSignUtils {
+public class URLSignUtils {
     private static final String SEPARATOR = "&";
     private static final String EQ = "=";
 
     private static final int DEFAULT_CAPACITY = 256;
 
+    private URLSignUtils() {}
+    
     /**
      * 根据参数计算签名
      * @param paramMap

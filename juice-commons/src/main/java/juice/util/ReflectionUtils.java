@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * @author Ricky Fung
  */
-public abstract class ReflectionUtils {
+public class ReflectionUtils {
 
     private static final Class<?>[] EMPTY_CLASS_ARRAY = new Class<?>[0];
 
@@ -33,6 +33,8 @@ public abstract class ReflectionUtils {
      */
     private static final Map<Class<?>, Field[]> declaredFieldsCache = new ConcurrentReferenceHashMap<>(256);
 
+    private ReflectionUtils() {}
+    
     // Method handling
     /**
      * Attempt to find a {@link Method} on the supplied class with the supplied name

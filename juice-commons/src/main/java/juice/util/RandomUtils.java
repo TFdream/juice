@@ -6,8 +6,10 @@ import java.util.concurrent.ThreadLocalRandom;
  * 封装ThreadLocalRandom
  * @author Ricky Fung
  */
-public abstract class RandomUtils {
+public class RandomUtils {
 
+    private RandomUtils() {}
+    
     /**
      * 产生 [min, max) 范围内的随机数
      * @param min

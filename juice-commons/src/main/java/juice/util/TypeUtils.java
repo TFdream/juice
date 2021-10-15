@@ -10,8 +10,10 @@ import java.lang.reflect.WildcardType;
 /**
  * @author Ricky Fung
  */
-public abstract class TypeUtils {
+public class TypeUtils {
 
+    private TypeUtils() {}
+    
     /**
      * Check if the right-hand side type may be assigned to the left-hand side
      * type following the Java generics rules.

@@ -9,13 +9,15 @@ import java.time.format.DateTimeFormatter;
 /**
  * @author Ricky Fung
  */
-public abstract class IdCardUtils {
+public class IdCardUtils {
     //旧一代身份证号
     private static final int OLD_ID_NO_LENGTH = 15;
 
     //新一代身份证号 18位
     private static final int NEW_ID_NO_LENGTH = 18;
 
+    private IdCardUtils() {}
+    
     /**
      * 根据身份证号获取性别
      * @param idNo 身份证号

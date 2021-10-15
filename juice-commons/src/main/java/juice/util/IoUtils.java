@@ -8,7 +8,7 @@ import java.io.OutputStream;
 /**
  * @author Ricky Fung
  */
-public abstract class IoUtils {
+public class IoUtils {
     /**
      * Represents the end-of-file (or stream).
      * @since 2.5 (made public)
@@ -17,6 +17,7 @@ public abstract class IoUtils {
 
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
+    private IoUtils() {}
 
     public static int copy(final InputStream input, final OutputStream output) throws IOException {
         final long count = copyLarge(input, output);

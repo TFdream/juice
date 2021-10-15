@@ -7,8 +7,10 @@ import java.util.Map;
 /**
  * 集合工具类
  */
-public abstract class CollectionUtils {
+public class CollectionUtils {
 
+    private CollectionUtils() {}
+    
     public static int size(Collection col) {
         return col!=null ? col.size() : Ints.ZERO;
     }

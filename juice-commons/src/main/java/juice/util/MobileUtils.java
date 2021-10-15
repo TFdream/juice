@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * @author Ricky Fung
  */
-public abstract class MobileUtils {
+public class MobileUtils {
 
     /**
      * 正则表达式：验证手机号
@@ -20,6 +20,8 @@ public abstract class MobileUtils {
     public static final String REGEX_ID_CARD = "(^\\d{15}$)|(^\\d{18}$)|(^\\d{17}(\\d|X|x)$)";
     private static final Pattern ID_CARD_PATTERN = Pattern.compile(REGEX_ID_CARD, Pattern.CASE_INSENSITIVE);
 
+    private MobileUtils() {}
+    
     /**
      * 是否为有效手机号
      * @param mobile

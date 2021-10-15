@@ -12,9 +12,11 @@ import java.security.spec.PKCS8EncodedKeySpec;
  * 使用512bit的RSA加密时，明文长度不能超过53字节，使用1024bit的RSA加密时，明文长度不能超过117字节，这也是为什么使用RSA的时候，总是配合AES一起使用，即用AES加密任意长度的明文，用RSA加密AES口令。
  * @author Ricky Fung
  */
-public abstract class RSAUtils {
+public class RSAUtils {
     private static final String ALG_NAME = "RSA";
 
+    private RSAUtils() {}
+    
     // 用公钥加密:
     public static byte[] encrypt(String message, PublicKey pk) throws GeneralSecurityException {
         return encrypt(StringUtils.getBytesUtf8(message), pk);

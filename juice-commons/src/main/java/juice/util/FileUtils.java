@@ -11,7 +11,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * @author Ricky Fung
  */
-public abstract class FileUtils {
+public class FileUtils {
 
     private static final long _KB = 1 << 10;
 
@@ -19,6 +19,8 @@ public abstract class FileUtils {
 
     private static final long _GB = 1 << 30;
 
+    private FileUtils() {}
+    
     public static String formatSize(long size) {
         if (size < _KB) {
             return String.format("%sB", size);

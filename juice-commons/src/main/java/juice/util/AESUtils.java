@@ -15,14 +15,16 @@ import java.util.Arrays;
  * AES 加密/解密
  * @author Ricky Fung
  */
-public abstract class AESUtils {
+public class AESUtils {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
     private static String ALGORITHM_AES = "AES";
     private static final int SECRET_KEY_LENGTH = 16;
 
     //密钥(上线后不要修改此属性值，否则后果不堪设想)
-    private static final String DEFAULT_SECRET_KEY = "VIP306";
+    private static final String DEFAULT_SECRET_KEY = "juice_2021";
 
+    private AESUtils() {}
+    
     public static String encrypt(String plainText) {
         return encrypt(plainText, DEFAULT_SECRET_KEY);
     }

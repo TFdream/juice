@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author Ricky Fung
  */
-public abstract class StringUtils {
+public class StringUtils {
 
     public static final String CHARSET_UTF8 = "UTF-8";
 
@@ -34,6 +34,8 @@ public abstract class StringUtils {
      */
     public static final String CR = "\r";
 
+    private StringUtils() {}
+    
     //=========
     public static boolean isEmpty(final CharSequence cs) {
         return cs == null || cs.length() == 0;

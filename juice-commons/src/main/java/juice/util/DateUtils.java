@@ -11,7 +11,7 @@ import java.util.Date;
  * 基于Java8 time API
  * @author Ricky Fung
  */
-public abstract class DateUtils {
+public class DateUtils {
     public static final String STANDARD_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static final String STANDARD_DATE_FORMAT_UTC_SHORT = "yyyy-MM-dd'T'HH:mm:ss";
@@ -30,6 +30,8 @@ public abstract class DateUtils {
      */
     public static final String TIME_STANDARD_FORMAT = "HH:mm:ss";
 
+    private DateUtils() {}
+    
     //========
     public static LocalDateTime parseDateTime(String dateStr) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(STANDARD_FORMAT);

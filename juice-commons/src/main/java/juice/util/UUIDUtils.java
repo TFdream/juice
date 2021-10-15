@@ -5,8 +5,10 @@ import java.util.UUID;
 /**
  * @author Ricky Fung
  */
-public abstract class UUIDUtils {
+public class UUIDUtils {
 
+    public UUIDUtils() {}
+    
     public static String getId() {
         return UUID.randomUUID().toString();
     }

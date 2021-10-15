@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author Ricky Fung
  */
-public abstract class ClassUtils {
+public class ClassUtils {
     /** The package separator character: {@code '.'}. */
     private static final char PACKAGE_SEPARATOR = '.';
 
@@ -46,6 +46,8 @@ public abstract class ClassUtils {
 
     }
 
+    private ClassUtils() {}
+    
     /**
      * Return the default ClassLoader to use: typically the thread context
      * ClassLoader, if available; the ClassLoader that loaded the ClassUtils

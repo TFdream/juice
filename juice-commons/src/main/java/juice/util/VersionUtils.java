@@ -5,8 +5,10 @@ package juice.util;
  * 版本号格式: major.minor.patch 例如: 7.4.2 7.5.10
  * @author Ricky Fung
  */
-public abstract class VersionUtils {
+public class VersionUtils {
 
+    private VersionUtils() {}
+    
     /**
      * 版本号转整数<br>
      * 例如:

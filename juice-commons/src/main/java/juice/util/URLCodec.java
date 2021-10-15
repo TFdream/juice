@@ -8,8 +8,10 @@ import java.net.URLEncoder;
  * URL 编码&解码工具类
  * @author Ricky Fung
  */
-public abstract class URLCodec {
+public class URLCodec {
 
+    private URLCodec() {}
+    
     /**
      * URL编码 参考：URLEncoder.encode方法
      * @param data

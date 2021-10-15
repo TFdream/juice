@@ -9,7 +9,10 @@ import java.util.Optional;
 /**
  * @author Ricky Fung
  */
-public abstract class ObjectUtils {
+public class ObjectUtils {
+    
+    private ObjectUtils() {}
+    
     /**
      * Determine whether the given object is an array:
      * either an Object array or a primitive array.

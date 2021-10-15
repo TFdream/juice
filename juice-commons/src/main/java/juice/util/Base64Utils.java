@@ -8,9 +8,11 @@ import java.nio.charset.StandardCharsets;
 /**
  * @author Ricky Fung
  */
-public abstract class Base64Utils {
+public class Base64Utils {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
+    private Base64Utils() {}
+    
     //==========加密
     public static String encode(String data) {
         return bytesToString(Base64.encodeBase64(data.getBytes(UTF_8)));

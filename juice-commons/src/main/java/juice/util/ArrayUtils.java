@@ -6,8 +6,10 @@ import java.util.Random;
 /**
  * @author Ricky Fung
  */
-public abstract class ArrayUtils {
+public class ArrayUtils {
 
+    private ArrayUtils() {}
+    
     public static boolean isEmpty(short[] arr) {
         return arr==null || arr.length==0;
     }

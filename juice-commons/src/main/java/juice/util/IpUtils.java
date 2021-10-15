@@ -6,8 +6,10 @@ import java.util.Enumeration;
 /**
  * @author Ricky Fung
  */
-public abstract class IpUtils {
+public class IpUtils {
 
+    private IpUtils() {}
+    
     /**
      * IP转换为无符号整数
      * @param ipStr

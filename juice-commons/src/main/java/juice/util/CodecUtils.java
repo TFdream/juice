@@ -8,8 +8,10 @@ import java.io.InputStream;
 /**
  * @author Ricky Fung
  */
-public abstract class CodecUtils {
+public class CodecUtils {
 
+    private CodecUtils() {}
+    
     //=========MD5
     public static byte[] md5(String data) {
         return DigestUtils.md5(StringUtils.getBytesUtf8(data));

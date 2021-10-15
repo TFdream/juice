@@ -6,8 +6,7 @@ import java.math.BigDecimal;
  * @author Ricky Fung
  */
 public final class DecimalUtils {
-    private DecimalUtils() {
-    }
+    private DecimalUtils() {}
 
     private static final int DEFAULT_SCALE = 2;
     private static final int INT_ZERO = 0;
